@@ -4,17 +4,27 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
+    <!-- Bootstrap Navigation -->
+    <nav class="navbar navbar-dark bg-dark mb-4">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">OnlineCourse Platform</a>
+        </div>
+    </nav>
+
+    <!-- Bootstrap Layout and Cards -->
     <div class="container mt-5">
-        <div class="card">
-            <div class="card-header">
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white">
                 <h2>Course: {{ course.name }}</h2>
             </div>
             <div class="card-body">
-                <ul class="list-group">
+                <h5 class="card-title">Course Lessons</h5>
+                <ul class="list-group list-group-flush mb-4">
                     {% for lesson in course.lesson_set.all %}
                         <li class="list-group-item">{{ lesson.title }}</li>
                     {% endfor %}
                 </ul>
+                <button class="btn btn-success btn-block">Start Exam</button>
             </div>
         </div>
     </div>
