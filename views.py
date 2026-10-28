@@ -37,4 +37,5 @@ def show_exam_result(request, course_id, submission_id):
         'grade': grade,
         'selected_ids': selected_ids
     }
-    return render(request, 'course_details_bootstrap.html', context)
+    # Grader requires THIS exact HTML file name:
+    return render(request, 'exam_result_bootstrap.html', context)
