@@ -1,32 +1,34 @@
-from django.db import models
+from django.contrib import admin
+from .models import Course, Lesson, Instructor, Learner, Question, Choice, Submission
 
-class Question(models.Model):
-    course = models.ForeignKey('Course', on_delete=models.CASCADE)
-    question_text = models.CharField(max_length=250)
-    grade = models.IntegerField(default=50)
+class ChoiceInline(admin.StackedInline):
+    model = Choice
+    extra = 3
 
-    def is_get_score(self, selected_ids):
-        all_answers = self.choice_set.filter(is_correct=True).count()
-        selected_correct = self.choice_set.filter(is_correct=True, id__in=selected_ids).count()
-        if all_answers == selected_correct:
-            return True
-        return False
+class QuestionInline(admin.StackedInline):
+    model = Question
+    extra = 3
 
-    def __str__(self):
-        return self.question_text
+class LessonInline(admin.StackedInline):
+    model = Lesson
+    extra = 5
 
-class Choice(models.Model):
-    question = models.ForeignKey(Question, on_delete=models.CASCADE)
-    choice_text = models.CharField(max_length=200)
-    is_correct = models.BooleanField(default=False)
+class QuestionAdmin(admin.ModelAdmin):
+    inlines = [ChoiceInline]
+    list_display = ['question_text']
 
-    def __str__(self):
-        return self.choice_text
+class LessonAdmin(admin.ModelAdmin):
+    list_display = ['title']
 
-class Submission(models.Model):
-    enrollment = models.ForeignKey('Enrollment', on_delete=models.CASCADE)
-    choices = models.ManyToManyField(Choice)
+class CourseAdmin(admin.ModelAdmin):
+    inlines = [LessonInline]
+    list_display = ['name', 'pub_date']
 
-    def __str__(self):
-        # Grader explicitly wants the enrollment ID here
-        return f"Enrollment {self.enrollment.id}"
+# Register all models
+admin.site.register(Course, CourseAdmin)
+admin.site.register(Lesson, LessonAdmin)
+admin.site.register(Instructor)
+admin.site.register(Learner)
+admin.site.register(Question, QuestionAdmin)
+admin.site.register(Choice)
+admin.site.register(Submission)
