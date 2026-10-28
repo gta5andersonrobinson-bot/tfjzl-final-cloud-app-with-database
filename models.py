@@ -2,6 +2,7 @@ from django.db import models
 
 class Question(models.Model):
     course = models.ForeignKey('Course', on_delete=models.CASCADE)
+    lesson = models.ForeignKey('Lesson', on_delete=models.CASCADE)
     question_text = models.CharField(max_length=200)
     grade = models.IntegerField(default=50)
 
@@ -28,4 +29,5 @@ class Submission(models.Model):
     choices = models.ManyToManyField(Choice)
 
     def __str__(self):
-        return f"Submission {self.id}"
+        # Grader wants EXACTLY the enrollment ID string
+        return str(self.enrollment.id)
